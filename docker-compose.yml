@@ -1,0 +1,54 @@
+version: '3'
+services:
+  dockerflaskserveur:
+    build:
+      context: .
+      dockerfile: Dockerfile-serveur
+    container_name: flask-serveur
+    ports: 
+      - 5001:5001
+    networks:
+      - cassandra
+    entrypoint:
+      - flask
+      - run
+      - --host=0.0.0.0
+      - --port=5001
+    environment: 
+      - FLASK_DEBUG=1
+      - FLASK_APP=./serveur.py
+    volumes:
+      ['./serveur_rest:/serveur_rest']
+
+
+  cassandra1:
+    container_name: cas1
+    ports:
+      - 9042:9042
+    image: cassandra:latest
+    volumes:
+      - ./cassandra1_data:/var/lib/cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=MyCluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+    networks:
+      - cassandra
+
+  cassandra2:
+    container_name: cas2
+    ports:
+      - 9043:9042
+    image: cassandra:latest
+    volumes:
+      - ./cassandra2_data:/var/lib/cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=MyCluster
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_SEEDS=cassandra1
+    depends_on:
+      - cassandra1
+    networks:
+      - cassandra
+
+networks:
+    cassandra:
