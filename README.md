@@ -55,7 +55,7 @@ Voici comment utiliser l'API :
 
 - Pour obtenir le nombre d'inspections d'un restaurant à partir de son identifiant :
 
-```http://localhost:5001/api/inspections/<id>```
+```http://localhost:5001/api/inspection/<id>```
 
 - Pour récupérer les noms des 10 premiers restaurants d'un grade donné :
 
