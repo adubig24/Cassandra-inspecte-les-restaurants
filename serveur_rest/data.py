@@ -4,7 +4,7 @@ class DataAccess :
 
     @classmethod
     def connexion(cls) :
-        cls.cluster = Cluster(['cas1'],port=9042)
+        cls.cluster = Cluster(['cas1', 'cas2'])
         cls.session = cls.cluster.connect('resto', wait_for_all_pools=True)
 
     @classmethod
@@ -36,5 +36,3 @@ class DataAccess :
             for row in rows:
                 names.append(row.name)
         return names
-
-
